@@ -1,0 +1,57 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class TextFade : MonoBehaviour
+{
+  Text[] childTexts;
+
+  private void Start()
+  {
+    childTexts = GetComponentsInChildren<Text>();
+  }
+  public IEnumerator FadeTextToFullAlpha(float t, Text i)
+  {
+    i.color = new Color(i.color.r, i.color.g, i.color.b, 0);
+    while (i.color.a < 1.0f)
+    {
+      i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a + (Time.deltaTime / t));
+      yield return null;
+    }
+  }
+
+  public IEnumerator FadeTextToZeroAlpha(float t, Text i)
+  {
+    i.color = new Color(i.color.r, i.color.g, i.color.b, 1);
+    while (i.color.a > 0.0f)
+    {
+      i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
+      yield return null;
+    }
+  }
+
+  private void OnTriggerEnter2D(Collider2D other)
+  {
+    if (other.gameObject.CompareTag("Player"))
+    {
+      Text[] childTexts = GetComponentsInChildren<Text>();
+      foreach (Text text in childTexts)
+      {
+        StartCoroutine(FadeTextToFullAlpha(1f, text));
+      }
+    }
+  }
+
+  private void OnTriggerExit2D(Collider2D other)
+  {
+    if (other.gameObject.CompareTag("Player"))
+    {
+      Text[] childTexts = GetComponentsInChildren<Text>();
+      foreach (Text text in childTexts)
+      {
+        StartCoroutine(FadeTextToZeroAlpha(1f, text));
+      }
+    }
+  }
+}
