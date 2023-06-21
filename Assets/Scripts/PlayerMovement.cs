@@ -28,17 +28,20 @@ public class PlayerMovement : MonoBehaviour
 
   void Update()
   {
-    x = Input.GetAxisRaw("Horizontal");
-
-    rb.velocity = new Vector2(x * moveSpeed, rb.velocity.y);
-
-    if (Input.GetButtonDown("Jump") && IsGrounded())
+    bool jumpInput = Input.GetButtonDown("Jump") || Input.GetAxis("Vertical") > 0;
+    if (jumpInput && IsGrounded())
     {
       audioSource.PlayOneShot(jumpSFX);
       rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
     UpdateAnimationState();
+  }
+
+  void FixedUpdate()
+  {
+    x = Input.GetAxisRaw("Horizontal");
+    rb.velocity = new Vector2(x * moveSpeed, rb.velocity.y);
   }
 
   private void UpdateAnimationState()
