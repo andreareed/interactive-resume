@@ -8,11 +8,10 @@ public class PlayerMovement : MonoBehaviour
   private BoxCollider2D boxCollider;
   private Animator animator;
   private SpriteRenderer spriteRenderer;
-  private AudioSource audioSource;
 
   [SerializeField] private float moveSpeed = 7f;
   [SerializeField] private float jumpForce = 14f;
-  [SerializeField] private AudioClip jumpSFX;
+  [SerializeField] private AudioSource jumpSFX;
 
   private enum MovementState { idle, running, jumping, falling };
   private float x = 0;
@@ -23,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     boxCollider = GetComponent<BoxCollider2D>();
     animator = GetComponent<Animator>();
     spriteRenderer = GetComponent<SpriteRenderer>();
-    audioSource = GetComponent<AudioSource>();
   }
 
   void Update()
@@ -31,7 +29,10 @@ public class PlayerMovement : MonoBehaviour
     bool jumpInput = Input.GetButtonDown("Jump") || Input.GetAxis("Vertical") > 0;
     if (jumpInput && IsGrounded())
     {
-      audioSource.PlayOneShot(jumpSFX);
+      if (!jumpSFX.isPlaying)
+      {
+        jumpSFX.Play();
+      }
       rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 

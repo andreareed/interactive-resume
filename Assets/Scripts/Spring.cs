@@ -5,15 +5,13 @@ using UnityEngine;
 public class Spring : MonoBehaviour
 {
   private Animator animator;
-  private AudioSource audioSource;
   [SerializeField] private float springForce = 20f;
 
-  [SerializeField] private AudioClip springSFX;
+  [SerializeField] private AudioSource springSFX;
 
   void Start()
   {
     animator = GetComponent<Animator>();
-    audioSource = GetComponent<AudioSource>();
   }
 
   void OnTriggerEnter2D(Collider2D other)
@@ -25,7 +23,7 @@ public class Spring : MonoBehaviour
       rb.velocity = new Vector2(rb.velocity.x, springForce);
       if (springSFX != null)
       {
-        audioSource.PlayOneShot(springSFX);
+        springSFX.Play();
       }
       if (animator != null)
       {
