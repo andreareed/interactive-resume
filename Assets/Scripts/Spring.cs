@@ -21,7 +21,7 @@ public class Spring : MonoBehaviour
     if (rb != null)
     {
       rb.velocity = new Vector2(rb.velocity.x, springForce);
-      if (springSFX != null)
+      if (springSFX != null && !SoundManager.Instance.isMuted)
       {
         springSFX.Play();
       }

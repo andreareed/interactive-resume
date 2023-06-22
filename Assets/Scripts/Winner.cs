@@ -9,7 +9,7 @@ public class Winner : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D other)
   {
-    if (!hasPlayed && other.gameObject.tag == "Player" && winnerSFX != null)
+    if (!hasPlayed && other.gameObject.tag == "Player" && !SoundManager.Instance.isMuted)
     {
       winnerSFX.Play();
       hasPlayed = true;

@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     bool jumpInput = Input.GetButtonDown("Jump") || Input.GetAxis("Vertical") > 0;
     if (jumpInput && IsGrounded())
     {
-      if (!jumpSFX.isPlaying)
+      if (!jumpSFX.isPlaying && !SoundManager.Instance.isMuted)
       {
         jumpSFX.Play();
       }
