@@ -2,16 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TextFade : MonoBehaviour
 {
-  Text[] childTexts;
+  TextMeshProUGUI[] childTexts;
 
   private void Start()
   {
-    childTexts = GetComponentsInChildren<Text>();
+    childTexts = GetComponentsInChildren<TextMeshProUGUI>();
+    foreach (TextMeshProUGUI text in childTexts)
+    {
+      text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+    }
   }
-  public IEnumerator FadeTextToFullAlpha(float t, Text i)
+
+  public IEnumerator FadeTextToFullAlpha(float t, TextMeshProUGUI i)
   {
     i.color = new Color(i.color.r, i.color.g, i.color.b, 0);
     while (i.color.a < 1.0f)
@@ -21,7 +27,7 @@ public class TextFade : MonoBehaviour
     }
   }
 
-  public IEnumerator FadeTextToZeroAlpha(float t, Text i)
+  public IEnumerator FadeTextToZeroAlpha(float t, TextMeshProUGUI i)
   {
     i.color = new Color(i.color.r, i.color.g, i.color.b, 1);
     while (i.color.a > 0.0f)
@@ -35,22 +41,11 @@ public class TextFade : MonoBehaviour
   {
     if (other.gameObject.CompareTag("Player"))
     {
-      Text[] childTexts = GetComponentsInChildren<Text>();
-      foreach (Text text in childTexts)
+      TextMeshProUGUI[] childTexts = GetComponentsInChildren<TextMeshProUGUI>();
+      foreach (TextMeshProUGUI text in childTexts)
       {
-        StartCoroutine(FadeTextToFullAlpha(1f, text));
-      }
-    }
-  }
-
-  private void OnTriggerExit2D(Collider2D other)
-  {
-    if (other.gameObject.CompareTag("Player"))
-    {
-      Text[] childTexts = GetComponentsInChildren<Text>();
-      foreach (Text text in childTexts)
-      {
-        StartCoroutine(FadeTextToZeroAlpha(1f, text));
+        if (text.color.a == 0)
+          StartCoroutine(FadeTextToFullAlpha(1f, text));
       }
     }
   }
