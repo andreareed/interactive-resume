@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
   private Animator animator;
   private SpriteRenderer spriteRenderer;
 
+  [SerializeField] private Joystick joystick;
   [SerializeField] private float moveSpeed = 7f;
   [SerializeField] private float jumpForce = 14f;
   [SerializeField] private AudioSource jumpSFX;
@@ -27,7 +28,17 @@ public class PlayerMovement : MonoBehaviour
   void Update()
   {
     bool jumpInput = Input.GetButtonDown("Jump") || Input.GetAxis("Vertical") > 0;
-    if (jumpInput && IsGrounded())
+    if (jumpInput)
+    {
+      Jump();
+    }
+
+    UpdateAnimationState();
+  }
+
+  public void Jump()
+  {
+    if (IsGrounded())
     {
       if (!jumpSFX.isPlaying && !SoundManager.Instance.isMuted)
       {
@@ -35,20 +46,17 @@ public class PlayerMovement : MonoBehaviour
       }
       rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
-
-    UpdateAnimationState();
   }
 
   void FixedUpdate()
   {
-    x = Input.GetAxisRaw("Horizontal");
+    x = Mathf.Abs(joystick.Horizontal) > .2 ? joystick.Horizontal : Input.GetAxisRaw("Horizontal");
     rb.velocity = new Vector2(x * moveSpeed, rb.velocity.y);
   }
 
   private void UpdateAnimationState()
   {
     MovementState state;
-    float x = Input.GetAxisRaw("Horizontal");
 
     if (x != 0)
     {
